@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "express": "^4.21.1",
+    "nodemon": "^3.1.7"
+  },
+  "name": "spotify-jam-backend",
+  "description": "",
+  "version": "1.0.0",
+  "main": "app.mjs",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.mjs"
+  },
+  "author": "",
+  "license": "ISC"
+}
