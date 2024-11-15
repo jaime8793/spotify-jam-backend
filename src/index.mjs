@@ -1,18 +1,43 @@
 import express from "express";
 import passport from "passport";
+import mongoose from "mongoose";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 import "../strategies/spotifyStrategy.mjs";
 
 const app = express();
 const port = 3000;
 
+mongoose
+  .connect("mongodb://localhost/spotify-jam")
+  .then(() => console.log("Connected to the database"))
+  .catch((err) => console.log(`this is the database error:`, err));
+
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 60000 * 60 },
+    store: MongoStore.create({
+      client: mongoose.connection.getClient(),
+    }),
+  })
+);
+
 app.use(passport.initialize());
+app.use(passport.session());
+
+app.get(`/`, (req, res) => {
+  res.send(`Welcome to spotify`);
+});
 
 app.get("/api/auth/spotify", passport.authenticate("spotify"));
 app.get(
   "/api/spotify/redirect",
-  passport.authenticate("spotify"),
+  passport.authenticate("spotify", { failureRedirect: `/api/v1/signIn` }),
   (req, res) => {
-    res.sendStatus(200);
+    res.redirect(`/`).status(200);
   }
 );
 
