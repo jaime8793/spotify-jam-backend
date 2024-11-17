@@ -2,19 +2,19 @@ import passport from "passport";
 import { Strategy } from "passport-spotify";
 import { SpotifyUser } from "../mongoose/schema/spotify-user.mjs";
 
-
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user.displayName);
 });
 
-passport.deserializeUser(async (id, done) => {
+passport.deserializeUser(async (displayName, done) => {
   try {
     //cool
     console.log("Inside deserializer");
-    const findUser = await SpotifyUser.findById(id);
+    const findUser = await SpotifyUser.findOne({ displayName: displayName });
     if (!findUser) throw new Error("User not found");
     done(null, findUser);
   } catch (err) {
+    console.log(`This is the desarilizer error`, err)
     done(err, null);
   }
 });
@@ -34,8 +34,12 @@ export default passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       let findUser;
+      const generatedId = mongoose.Types.ObjectId();
+      console.log(profile);
       try {
-        findUser = await SpotifyUser.findOne({ id: profile.id });
+        findUser = await SpotifyUser.findOne({
+          displayName: profile.displayName,
+        });
       } catch (error) {
         console.log(
           `This is an error in the spotify Strategy find user`,
@@ -45,9 +49,9 @@ export default passport.use(
       }
       try {
         if (!findUser) {
-         const newSpotifyUser = new SpotifyUser({
-            display_name: profile.display_name,
-            id: profile.id,
+          const newSpotifyUser = new SpotifyUser({
+            displayName: profile.displayName,
+            id: generatedId,
           });
           const newSavedUser = await newSpotifyUser.save();
           return done(null, newSavedUser);

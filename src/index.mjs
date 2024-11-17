@@ -6,7 +6,7 @@ import MongoStore from "connect-mongo";
 import "../strategies/spotifyStrategy.mjs";
 
 const app = express();
-const port = 3000;
+const port = 3003;
 
 mongoose
   .connect("mongodb://localhost/spotify-jam")
@@ -29,7 +29,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get(`/`, (req, res) => {
-  res.send(`Welcome to spotify`);
+  res.send(`Welcome to spotify` /n );
 });
 
 app.get("/api/auth/spotify", passport.authenticate("spotify"));

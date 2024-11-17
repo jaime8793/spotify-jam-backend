@@ -2,9 +2,10 @@ import mongoose from "mongoose";
 //import { type } from "os";
 
 const SpotifyUserSchema = new mongoose.Schema({
-  display_name: {
+  displayName: {
     type: mongoose.Schema.Types.String,
-    //required: true,
+    required: true,
+    unique: true,
   },
   id: {
     type: mongoose.Schema.Types.String,
