@@ -29,7 +29,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get(`/`, (req, res) => {
-  res.send(`Welcome to spotify` /n );
+  res.send(`Welcome to spotify`);
+});
+app.get(`/api/v1/signIn`, (req, res) => {
+  res.send(`Welcome to spotify Redirect`);
 });
 
 app.get("/api/auth/spotify", passport.authenticate("spotify"));
@@ -37,6 +40,7 @@ app.get(
   "/api/spotify/redirect",
   passport.authenticate("spotify", { failureRedirect: `/api/v1/signIn` }),
   (req, res) => {
+    console.log(User);
     res.redirect(`/`).status(200);
   }
 );
