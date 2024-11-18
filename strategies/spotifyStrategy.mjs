@@ -1,5 +1,4 @@
 import passport from "passport";
-import mongoose from "mongoose";
 import { Strategy } from "passport-spotify";
 import { SpotifyUser } from "../mongoose/schema/spotify-user.mjs";
 
@@ -9,13 +8,11 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (displayName, done) => {
   try {
-    //cool
     console.log("Inside deserializer");
     const findUser = await SpotifyUser.findOne({ displayName: displayName });
-    //if (!findUser) throw new Error("User not found");
-   return findUser ? done(null, findUser) : done(null, null)
+    return findUser ? done(null, findUser) : done(null, null);
   } catch (err) {
-    console.log(`This is the desarilizer error`, err)
+    console.log(`This is the desarilizer error`, err);
     done(err, null);
   }
 });
@@ -28,7 +25,7 @@ export default passport.use(
       callbackURL: "http://localhost:3003/api/spotify/redirect",
       scope: [
         "playlist-read-private",
-        "user-top-read", 
+        "user-top-read",
         "user-follow-read",
         "user-read-recently-played",
       ],
@@ -36,6 +33,7 @@ export default passport.use(
     async (accessToken, refreshToken, profile, done) => {
       let findUser;
       console.log(profile);
+      console.log(`This is the access token:`, accessToken);
       try {
         findUser = await SpotifyUser.findOne({
           displayName: profile.displayName,
@@ -67,3 +65,5 @@ export default passport.use(
     }
   )
 );
+
+
