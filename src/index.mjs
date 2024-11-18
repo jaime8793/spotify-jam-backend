@@ -1,4 +1,4 @@
-import express from "express";
+import express, { application } from "express";
 import passport from "passport";
 import mongoose from "mongoose";
 import session from "express-session";
@@ -40,10 +40,15 @@ app.get(
   "/api/spotify/redirect",
   passport.authenticate("spotify", { failureRedirect: `/api/v1/signIn` }),
   (req, res) => {
-    console.log(User);
-    res.redirect(`/`).status(200);
+    //console.log(User);
+    console.log("Authorization Code:", req.query.code);
+    res.send(req.user).status(200);
   }
 );
+
+app.get(`api/status/spotify`, (req, res) => {
+  return req.user ? res.send(res.user) : res.sendStatus(401)
+})
 
 app.listen(port, () => {
   console.log("Server running on port:", port);
