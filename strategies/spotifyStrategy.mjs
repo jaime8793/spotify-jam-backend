@@ -55,7 +55,7 @@ export default passport.use(
           const newSavedUser = await newSpotifyUser.save();
           return done(null, newSavedUser);
         }
-        profile.accessToken = accessToken;
+        findUser.accessToken = accessToken;
         return done(null, findUser, refreshToken);
       } catch (error) {
         console.log(

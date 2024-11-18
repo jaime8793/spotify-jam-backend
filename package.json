@@ -10,7 +10,7 @@
     "nodemon": "^3.1.7",
     "passport": "^0.7.0",
     "passport-spotify": "^2.0.0",
-    "spotify-web-api-js": "^1.5.2"
+    "spotify-web-api-node": "^5.0.2"
   },
   "name": "spotify-jam-backend",
   "description": "",
