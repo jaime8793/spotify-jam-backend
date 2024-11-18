@@ -27,7 +27,6 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.get(`/`, (req, res) => {
   res.send(`Welcome to spotify`);
 });
@@ -41,7 +40,7 @@ app.get(
   passport.authenticate("spotify", { failureRedirect: `/api/v1/signIn` }),
   (req, res) => {
     //console.log(User);
-    console.log("Authorization Code:", req.query.code);
+    req.session.accessToken = req.user.accessToken; // Add token to session
     res.send(req.user).status(200);
   }
 );

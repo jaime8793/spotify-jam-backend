@@ -32,8 +32,9 @@ export default passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       let findUser;
-      console.log(profile);
+      //console.log(profile);
       console.log(`This is the access token:`, accessToken);
+      //req.body.accessToken = accessToken;
       try {
         findUser = await SpotifyUser.findOne({
           displayName: profile.displayName,
@@ -54,7 +55,8 @@ export default passport.use(
           const newSavedUser = await newSpotifyUser.save();
           return done(null, newSavedUser);
         }
-        return done(null, findUser);
+        profile.accessToken = accessToken;
+        return done(null, findUser, refreshToken);
       } catch (error) {
         console.log(
           `This is an error in the spotify Strategy save user`,
@@ -65,5 +67,3 @@ export default passport.use(
     }
   )
 );
-
-
