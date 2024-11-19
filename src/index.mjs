@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import spotifyRouter from "../routes/spotifyGet.mjs";
+import cors from "cors";
 import "../strategies/spotifyStrategy.mjs";
 
 const app = express();
@@ -13,6 +14,14 @@ mongoose
   .connect("mongodb://localhost/spotify-jam")
   .then(() => console.log("Connected to the database"))
   .catch((err) => console.log(`this is the database error:`, err));
+
+// Allow requests from the React frontend
+app.use(
+  cors({
+    origin: "http://localhost:5174", // Replace with your frontend's URL
+    credentials: true, // Allow cookies to be sent across origins
+  })
+);
 
 app.use(
   session({
@@ -56,7 +65,7 @@ app.get(`/api/status/spotify`, (req, res) => {
     return res.status(401).json({ error: "No access token found in session" });
   }
 
-  return res.redirect(`/api/v1/getUserSpotify`);
+  return res.sendStatus(200);
 });
 
 app.listen(port, () => {
