@@ -31,6 +31,7 @@ app.use(passport.session());
 app.use(`/api/v1/getUserSpotify`, spotifyRouter);
 
 app.get(`/`, (req, res) => {
+  console.log(`Home Visited`);
   res.redirect(`/api/auth/spotify`);
 });
 
